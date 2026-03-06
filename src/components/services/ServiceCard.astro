@@ -1,0 +1,37 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+// Icons
+import ArrowRight from "@/components/fundations/icons/ArrowRight.astro";
+const { url, service, description } = {
+  url: "/services/" + Astro.props.post.slug,
+  service: Astro.props.post.data.service,
+  description: Astro.props.post.data.description,
+};
+---
+
+<div
+  class="bg-base-950 p-4 rounded-xl outline-base-900 outline relative overflow-hidden hover:bg-linear-45 hover:from-base-800 duration-500 transition-colors"
+>
+  <div class="grid grid-cols-1 md:grid-cols-3">
+    <Text tag="h3" variant="textBase" class="text-white font-mono uppercase">
+      {service}
+    </Text>
+    <Text tag="p" variant="textBase" class="text-base-500">
+      {description}
+    </Text>
+    <Button
+      isLink
+      iconOnly
+      size="xs"
+      href={url}
+      variant="muted"
+      class="ml-auto"
+      title={`Read more: ${service}`}
+      aria-label={`Read more : ${service}`}
+    >
+      <ArrowRight slot="icon" size="xs" />
+    </Button>
+  </div>
+</div>

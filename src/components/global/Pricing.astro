@@ -1,0 +1,186 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Pricing data
+const pricingPlans = [
+  {
+    title: "Design Only",
+    price: 2499,
+    billingCycle: "one-time",
+    currency: "USD",
+    additionalTax: "Applicable local taxes",
+    description:
+      "Ideal for startups and businesses needing high-quality, modern UI/UX design.",
+    features: [
+      "Custom UI/UX design",
+      "Figma or Adobe XD deliverables",
+      "Responsive and user-friendly layouts",
+      "Brand-consistent visuals",
+      "Design handoff for developers",
+    ],
+    button: {
+      text: "Get your design",
+      variant: "default",
+    },
+  },
+  {
+    title: "Design + Development",
+    price: 3999,
+    billingCycle: "monthly",
+    currency: "USD",
+    additionalTax: "Applicable local taxes",
+    description:
+      "Perfect for startups seeking high-quality design and  front-end development.",
+    features: [
+      "Built with Astro.js & Tailwind CSS",
+      "Optimized for performance & accessibility",
+      "Essential SEO for better visibility",
+      "Ongoing support & maintenance",
+    ],
+    button: {
+      text: "Start your project",
+      variant: "default",
+    },
+  },
+  {
+    title: "One-Time Design + Dev",
+    price: 5999,
+    billingCycle: "one-time",
+    currency: "USD",
+    additionalTax: "Applicable local taxes",
+    description:
+      "A complete design and front-end package for businesses needing  full-service.",
+    features: [
+      "Custom UI/UX design",
+      "Figma or Adobe XD deliverables",
+      "Astro.js & Tailwind CSS implementation",
+      "Optimized for performance & SEO",
+      "Responsive & accessible code",
+      "Final handoff & deployment support",
+    ],
+    button: {
+      text: "Launch your project",
+      variant: "accent",
+    },
+  },
+];
+---
+
+<section id="pricing" class="scroll-mt-24">
+  <Wrapper variant="standard" class="border-t border-base-900">
+    <div
+      class="grid grid-cols-1 gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+    >
+      <section
+        class="bg-linear-45 from-base-900 p-8 overflow-hidden relative rounded-xl outline outline-base-900 shadow-2xl shadow-base-950 bg-diamonds bg-cover bg-blend-overlay"
+      >
+        <div class="flex flex-col justify-between h-full relative">
+          <div>
+            <Text tag="h3" variant="displaySM" class="text-white">
+              Pricing
+            </Text>
+            <Text
+              tag="p"
+              variant="textSM"
+              class="text-base-500 mt-4 text-balance"
+            >
+              Custom and adaptable pricing to boost your online visibility at
+              any phase.
+            </Text>
+          </div>
+          <div>
+            <div class="flex flex-col">
+              <Text
+                tag="p"
+                variant="textXS"
+                class="text-base-400 tracking-wide font-normal"
+              >
+                Project management with <span
+                  class="italic text-white font-medium">Orchestra</span
+                >, secure payments with <span
+                  class="italic text-white font-medium">Stripe</span
+                > and the freedom of
+                <span class="italic text-white font-medium">
+                  Canceling your subscription anytime.</span
+                >
+              </Text>
+              <div class="flex mt-8">
+                <Button
+                  isLink
+                  href="/contact"
+                  size="sm"
+                  variant="muted"
+                  class="w-full"
+                >
+                  Book an intro call
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      {
+        pricingPlans.map((plan) => (
+          <section class="bg-linear-45 from-base-900 p-8 overflow-hidden relative rounded-xl outline outline-base-900 shadow-2xl shadow-base-950 flex flex-col justify-between h-full">
+            <div class="flex flex-col h-full justify-start">
+              <div class="flex flex-col gap-2">
+                <div class="flex flex-col gap-2">
+                  <Text
+                    tag="h3"
+                    variant="textLg"
+                    class=" text-white  font-mono uppercase"
+                  >
+                    {plan.title}
+                  </Text>
+                  <Text tag="p" variant="textXL" class=" text-white mt-2">
+                    ${plan.price}
+                    <span class="text-xs text-base-500">
+                      {" "}
+                      /{plan.billingCycle}{" "}
+                    </span>
+                    <span class="text-base-500 italic pt-1 block text-xs">
+                      {plan.currency} + {plan.additionalTax}
+                    </span>
+                  </Text>
+                </div>
+                <Text
+                  tag="p"
+                  variant="textSM"
+                  class=" text-white tracking-wide mt-4"
+                >
+                  {plan.description}
+                </Text>
+              </div>
+              <div class="mt-8">
+                <Text
+                  tag="p"
+                  variant="textSM"
+                  class=" uppercase font-mono text-white font-medium"
+                >
+                  What you get:
+                </Text>
+                <ul
+                  class="flex flex-col mt-4 text-sm text-base-500 font-medium gap-y-3"
+                  role="list"
+                >
+                  {plan.features.map((feature) => (
+                    <li class="flex flex-row items-start gap-2">
+                      ·<span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            <div class="w-full mt-8 ">
+              <Button size="sm" variant={plan.button.variant} class="w-full">
+                {plan.button.text}
+              </Button>
+            </div>
+          </section>
+        ))
+      }
+    </div>
+  </Wrapper>
+</section>

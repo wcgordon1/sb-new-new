@@ -1,0 +1,42 @@
+---
+// Assets
+import { Image } from "astro:assets";
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+// Icons
+import ArrowUpRight from "@/components/fundations/icons/ArrowUpRight.astro";
+import Button from "../fundations/elements/Button.astro";
+const { title, url, work, thumbnail, live } = {
+  url: "/work/" + Astro.props.post.slug,
+  live: Astro.props.post.data.live,
+  work: Astro.props.post.data.work,
+  title: Astro.props.post.data.title,
+  thumbnail: Astro.props.post.data.thumbnail.url,
+};
+---
+
+<article class="relative">
+  <a
+    href={url}
+    title={`Read more: ${title}`}
+    aria-label={`Read more : ${title}`}
+    class="absolute inset-0 z-10"></a>
+
+  <Image
+    alt={title}
+    src={thumbnail}
+    width={800}
+    height={700}
+    loading="lazy"
+    decoding="async"
+    class="w-full aspect-16/10 object-cover object-center rounded-xl"
+  />
+  <div class="mt-4">
+    <Text tag="h3" variant="textBase" class="text-white font-medium">
+      {title}
+    </Text>
+    <Text tag="p" variant="textSM" class="text-base-500 mt-1">
+      {work}
+    </Text>
+  </div>
+</article>

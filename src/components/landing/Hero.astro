@@ -1,0 +1,26 @@
+---
+// Fundatoions
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import ShadowCard from "@/components/fundations/containers/ShadowCard.astro";
+---
+
+<section>
+  <Wrapper
+    variant="standard"
+    class="h-dvh lg:h-[calc(100dvh-6rem)] flex flex-col items-end border-t border-base-900"
+  >
+    <ShadowCard
+      class="relative overflow-hidden flex flex-col justify-center w-full bg-diamonds bg-cover bg-blend-overlay"
+    >
+      <Text
+        tag="h1"
+        variant="displayMD"
+        class="text-white lg:text-balance font-thin tracking-tighter font-mono uppercase text-center"
+      >
+        Award-winning development studio based in Sweden, creating innovative
+        and high-quality digital solutions
+      </Text>
+    </ShadowCard>
+  </Wrapper>
+</section>

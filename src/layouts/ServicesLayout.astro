@@ -1,0 +1,100 @@
+---
+// Assets
+import { Image } from "astro:assets";
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import ShadowCard from "@/components/fundations/containers/ShadowCard.astro";
+// Section
+import ServiceCta from "@/components/ctas/ServiceCta.astro";
+// Content
+const { frontmatter } = Astro.props;
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper
+      variant="standard"
+      class="h-dvh lg:h-[calc(100dvh-6rem)] flex flex-col items-end border-t border-base-900"
+    >
+      <ShadowCard
+        class="relative overflow-hidden flex flex-col justify-center w-full bg-diamonds bg-cover bg-blend-overlay"
+      >
+        <div class="text-center max-w-3xl mx-auto">
+          <Text
+            tag="h1"
+            variant="display3XL"
+            class="text-white lg:text-balance font-thin tracking-tighter font-mono uppercase"
+          >
+            {frontmatter.service}
+          </Text>
+          <Text
+            tag="p"
+            variant="displayXS"
+            class="text-base-300 lg:text-balance mt-4"
+          >
+            {frontmatter.description}
+          </Text>
+        </div>
+      </ShadowCard>
+    </Wrapper>
+  </section>
+  <section>
+    <Wrapper variant="standard" class="border-t border-base-900">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 py-4">
+        {
+          frontmatter.allServices.map((service) => (
+            <div class="flex flex-col ">
+              <Text
+                tag="h4"
+                variant="textBase"
+                class="text-white uppercase  font-medium"
+              >
+                {service.service}
+              </Text>
+              <Text tag="p" variant="textXS" class="text-base-400 text-balance">
+                {service.description}
+              </Text>
+            </div>
+          ))
+        }
+      </div>
+    </Wrapper>
+  </section>
+  <section>
+    <Wrapper variant="standard" class="border-t border-base-900 py-12">
+      <Wrapper variant="prose" class="max-w-xl mx-auto">
+        <slot />
+      </Wrapper>
+    </Wrapper>
+  </section>
+  <section>
+    <Wrapper variant="standard" class="border-t border-base-900">
+      <div class="relative px-8 py-12">
+        {
+          frontmatter.testimonial && (
+            <div>
+              <Text
+                tag="h3"
+                variant="displaySM"
+                class="text-white  font-normal tracking-tigt font-mono uppercase text-balance italic"
+              >
+                "{frontmatter.testimonial.text}"
+              </Text>
+              <Image
+                width={256}
+                height={256}
+                src={frontmatter.testimonial.image}
+                alt={frontmatter.testimonial.name}
+                alt="#_"
+                class="max-w-24 ml-auto mt-8"
+              />
+            </div>
+          )
+        }
+      </div>
+    </Wrapper>
+  </section>
+  <ServiceCta />
+</BaseLayout>

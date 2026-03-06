@@ -1,0 +1,98 @@
+---
+// Assets
+import { Image } from "astro:assets";
+
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import ShadowCard from "@/components/fundations/containers/ShadowCard.astro";
+// Sections
+import TeamCta from "@/components/ctas/TeamCta.astro";
+const { frontmatter } = Astro.props;
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="border-t border-base-900">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 min-h-dvh">
+        <div class="lg:sticky lg:pb-16 top-8 lg:max-h-screen">
+          <ShadowCard class="bg-black">
+            <Image
+              width={800}
+              height={500}
+              src={frontmatter.avatar.url}
+              alt={frontmatter.avatar.alt}
+              class="aspect-12/8 object-top rounded-xl max-h-[70vh] w-full object-cover"
+            />
+            <Text tag="h3" variant="textBase" class="text-white mt-12">
+              {frontmatter.name}
+            </Text>
+            <Text tag="p" variant="textXS" class="text-base-400">
+              {frontmatter.intro}
+            </Text>
+            <Text tag="p" variant="textXS" class="text-base-400">
+              {frontmatter.role}
+            </Text>
+            <div class="border-y border-base-900 my-4 py-4 flex flex-col gap-4">
+              <div>
+                <Text
+                  tag="h4"
+                  variant="textXS"
+                  class="text-white uppercase font-medium">Education</Text
+                >
+                <ul class="mt-1">
+                  {
+                    frontmatter.education.map((item) => (
+                      <li>
+                        <Text tag="p" variant="textXS" class="text-base-400">
+                          {item}
+                        </Text>
+                      </li>
+                    ))
+                  }
+                </ul>
+              </div>
+              <div>
+                <Text
+                  tag="h4"
+                  variant="textXS"
+                  class="text-white uppercase font-medium">Experience</Text
+                >
+                <ul class="mt-1">
+                  {
+                    frontmatter.experience.map((item) => (
+                      <li>
+                        <Text tag="p" variant="textXS" class="text-base-400">
+                          {item}
+                        </Text>
+                      </li>
+                    ))
+                  }
+                </ul>
+              </div>
+            </div>
+            <div class="flex flex-col w-full gap-2 mt-8">
+              {
+                frontmatter.socials.map((socials) => (
+                  <Text
+                    tag="a"
+                    href={socials.url}
+                    variant="textXS"
+                    class="text-white "
+                  >
+                    {socials.platform}
+                  </Text>
+                ))
+              }
+            </div>
+          </ShadowCard>
+        </div>
+        <div class="flex flex-col gap-4 lg:col-span-2">
+          <Wrapper variant="prose" class="max-w-xl"><slot /></Wrapper>
+        </div>
+      </div>
+    </Wrapper>
+  </section>
+  <TeamCta />
+</BaseLayout>

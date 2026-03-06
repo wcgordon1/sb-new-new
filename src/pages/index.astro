@@ -1,0 +1,24 @@
+---
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import ShadowCard from "@/components/fundations/containers/ShadowCard.astro";
+// Sections
+import Hero from "@/components/landing/Hero.astro";
+import WorkPreview from "@/components/landing/WorkPreview.astro";
+import ServicesPreview from "@/components/landing/ServicesPreview.astro";
+import BlogPreview from "@/components/landing/BlogPreview.astro";
+// Sections
+import Testimonial1 from "@/components/testimonials/Testimonial1.astro";
+import Pricing from "@/components/global/Pricing.astro";
+---
+<BaseLayout>
+  <Hero />
+  <WorkPreview />
+  <ServicesPreview />
+  <Testimonial1 />
+  <Pricing />
+  <BlogPreview />
+</BaseLayout>

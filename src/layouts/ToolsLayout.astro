@@ -1,0 +1,26 @@
+---
+// Foundations
+import "../styles/global.css";
+import BaseHead from "@/components/fundations/head/BaseHead.astro";
+
+// Components
+import ToolsFooter from "@/components/tools/ToolsFooter.astro";
+import ToolsNavigation from "@/components/tools/ToolsNavigation.astro";
+---
+
+<html lang="en" class="scroll-smooth selection:bg-white selection:text-black">
+  <head>
+    <BaseHead />
+  </head>
+  <body class="bg-black relative lg:py-8">
+    <div
+      class="bg-stripes max-w-[85rem] mx-auto border-x border-y border-base-900 px-2 md:px-0 w-full lg:rounded-xl"
+    >
+      <ToolsNavigation />
+      <main>
+        <slot />
+      </main>
+      <ToolsFooter />
+    </div>
+  </body>
+</html>

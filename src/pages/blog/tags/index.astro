@@ -1,0 +1,57 @@
+---
+// Fundatons
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Icons
+import ArrowRight from "@/components/fundations/icons/ArrowRight.astro";
+// Sections
+import SubscribeCta from "@/components/ctas/SubscribeCta.astro";
+// Content
+import { getCollection } from "astro:content";
+const allPosts = await getCollection("posts");
+// Tags
+const tags = [...new Set(allPosts.map((post) => post.data.tags).flat())];
+const formatTagLabel = (tag) => tag.replace(/-/g, " ");
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper class="border-t border-base-800">
+      <div class="py-4">
+        <Text
+          tag="h3"
+          variant="textBase"
+          class="text-base-400 font-thin font-mono uppercase"
+        >
+          All tags
+        </Text>
+      </div>
+      <div role="list" class="flex flex-col gap-2">
+        {
+          tags.map((tag) => (
+            <div class="bg-base-950 p-4 items-center rounded-xl outline-base-900 outline relative overflow-hidden hover:bg-linear-45 hover:from-base-800 duration-500 transition-colors text-white w-full">
+              <div class="grid grid-cols-1 md:grid-cols-2 items-center">
+                <span class="capitalize">{formatTagLabel(tag)}</span>
+                <Button
+                  isLink
+                  iconOnly
+                  size="xs"
+                  href={`/blog/tags/${tag}`}
+                  variant="muted"
+                  class="ml-auto"
+                  title={`Read more: ${formatTagLabel(tag)}`}
+                  aria-label={`Read more : ${formatTagLabel(tag)}`}
+                >
+                  <ArrowRight slot="icon" size="xs" />
+                </Button>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </Wrapper>
+  </section>
+  <SubscribeCta />
+</BaseLayout>

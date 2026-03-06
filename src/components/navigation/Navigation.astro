@@ -1,0 +1,58 @@
+---
+// Assets
+import Logo from "@/components/assets/Logo.astro";
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import MobileNav from "@/components/navigation/MobileNav.astro";
+const primaryLinks = [
+  { label: "Overview", href: "/system/overview" },
+  { label: "Work", href: "/work" },
+  { label: "Services", href: "/#services" },
+  { label: "Pricing", href: "/#pricing" },
+  { label: "Blog", href: "/blog" },
+  { label: "Team", href: "/team" },
+  {
+    label: "Buy StudioMax",
+    href: "https://lexingtonthemes.com/templates/studiomax",
+  },
+];
+---
+
+<section>
+  <Wrapper variant="standard" class="py-4">
+    <nav class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <a class="flex items-center shrink-0 w-fit" href="/">
+        <span class="sr-only">Go to StudioMax homepage</span>
+        <Logo class="h-6 text-white" />
+      </a>
+      <div
+        class="hidden flex-1 items-center justify-center gap-4 lg:flex shrink-0 lg:col-span-2"
+      >
+        {
+          primaryLinks.map((link) => (
+            <Text
+              tag="a"
+              variant="textSM"
+              href={link.href}
+              class="text-base-400 transition-colors duration-200 hover:text-white"
+            >
+              {link.label}
+            </Text>
+          ))
+        }
+      </div>
+      <div class="hidden items-center gap-2 lg:ml-auto lg:flex w-fit">
+        <Button isLink href="/sign-in" size="sm" variant="muted">
+          Sign in
+        </Button>
+        <Button isLink href="/sign-up" size="sm" variant="accent">
+          Sign up
+        </Button>
+      </div>
+      <MobileNav primaryLinks={primaryLinks} />
+    </nav>
+  </Wrapper>
+</section>

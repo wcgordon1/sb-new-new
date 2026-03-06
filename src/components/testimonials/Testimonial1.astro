@@ -1,0 +1,35 @@
+---
+// Assets
+import { Image } from "astro:assets";
+import Brand from "@/images/logos/1.svg";
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+---
+
+<section>
+  <Wrapper variant="standard" class="border-t border-base-900">
+    <div
+      class="relative overflow-hidden text-center rounded-xl outline outline-base-900 shadow-2xl shadow-black bg-black"
+    >
+      <div class="relative bg-stripes py-12 xl:py-32">
+        <Text
+          tag="h3"
+          variant="displaySM"
+          class="text-white font-normal tracking-tigt font-mono uppercase text-balance italic"
+        >
+          "The team at SMAX exceeded our expectations during onboarding, even
+          managing to access the user's microphone without prompting an
+          intrusive permission request."
+        </Text>
+        <Image
+          width={256}
+          height={256}
+          src={Brand}
+          alt="#_"
+          class="max-w-24 mx-auto mt-24"
+        />
+      </div>
+    </div>
+  </Wrapper>
+</section>

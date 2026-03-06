@@ -1,0 +1,50 @@
+---
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import ShadowCard from "@/components/fundations/containers/ShadowCard.astro";
+// Components
+import TeamEntries1 from "@/components/team/TeamEntries1.astro";
+// Sections
+import TeamCta from "@/components/ctas/TeamCta.astro";
+// Content
+import { getCollection } from "astro:content";
+// Team
+const allTeam = await getCollection("team");
+// Sort 'allTeam' alphabetically by title
+allTeam.sort((a, b) => a.data.name.localeCompare(b.data.name));
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper
+      variant="standard"
+      class="h-dvh lg:h-[calc(100dvh-6rem)] flex flex-col items-end border-t border-base-900"
+    >
+      <ShadowCard
+        class="relative overflow-hidden flex flex-col justify-center w-full bg-diamonds bg-cover bg-blend-overlay"
+      >
+        <div class="text-center">
+          <Text
+            tag="h1"
+            variant="display6XL"
+            class="text-white lg:text-balance font-thin tracking-tighter font-mono uppercase"
+          >
+            team
+          </Text>
+        </div>
+      </ShadowCard>
+    </Wrapper>
+  </section>
+  <section>
+    <Wrapper variant="standard" class="border-t border-base-900">
+      <ShadowCard class="bg-black">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 gap-y-8">
+          {allTeam.map((post) => <TeamEntries1 post={post} />)}
+        </div>
+      </ShadowCard>
+    </Wrapper>
+  </section>
+  <TeamCta />
+</BaseLayout>

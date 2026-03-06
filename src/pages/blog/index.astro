@@ -1,0 +1,71 @@
+---
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import ShadowCard from "@/components/fundations/containers/ShadowCard.astro";
+// Components
+import BlogEntries1 from "@/components/blog/BlogCard.astro";
+// Sections
+import SubscribeCta from "@/components/ctas/SubscribeCta.astro";
+// Content
+import { getCollection } from "astro:content";
+const allPosts = await getCollection("posts");
+// Sort posts by date
+allPosts.sort((a, b) => {
+  const dateA = new Date(a.data.pubDate).getTime();
+  const dateB = new Date(b.data.pubDate).getTime();
+  return dateB - dateA; // Compare timestamps
+});
+// Tags
+const tags = [...new Set(allPosts.map((post) => post.data.tags).flat())];
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper
+      variant="standard"
+      class="h-dvh lg:h-[calc(100dvh-6rem)] flex flex-col items-end border-t border-base-900"
+    >
+      <ShadowCard
+        class="relative overflow-hidden flex flex-col justify-center w-full bg-diamonds bg-cover bg-blend-overlay"
+      >
+        <div class="text-center">
+          <Text
+            tag="h1"
+            variant="display6XL"
+            class="text-white lg:text-balance font-thin tracking-tighter font-mono uppercase"
+          >
+            Journal
+          </Text>
+        </div>
+      </ShadowCard>
+    </Wrapper>
+  </section>
+  <section>
+    <Wrapper variant="standard" class="border-t border-base-900">
+      <div class="flex flex-wrap gap-2">
+        {
+          tags.map((tag) => (
+            <Button
+              isLink
+              size="xs"
+              variant="muted"
+              class=" capitalize"
+              href={`/blog/tags/${tag}`}
+            >
+              {tag}
+            </Button>
+          ))
+        }
+      </div>
+      <ShadowCard class="bg-black mt-4">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-4 gap-y-24">
+          {allPosts.map((post) => <BlogEntries1 post={post} />)}
+        </div>
+      </ShadowCard>
+    </Wrapper>
+  </section>
+  <SubscribeCta />
+</BaseLayout>

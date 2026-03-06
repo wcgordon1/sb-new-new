@@ -1,0 +1,23 @@
+---
+interface Props {
+  variant?: "standard" | "prose"; // Define any variants you need
+  class?: string; // Optional prop for additional classes
+  id?: string; // Optional prop for additional classes
+}
+const { variant = "standard", class: extraClass = "" } = Astro.props;
+// Map each variant to its specific classes
+const variantClasses = {
+  // Standard wrapper
+  standard:
+    "max-w-7xl bg-base-950  2xl:max-w-[1400px] mx-auto border-x border-base-900  p-4",
+  // Prose styles
+  prose:
+    "prose prose-sm prose-headings:font-medium  text-base-500  prose-headings:text-white prose-blockquote:text-base-500   prose-blockquote:font-normal prose-blockquote:tracking-normal prose-img:border prose-img:border-base-200 prose-img:rounded-xl   prose-a:text-accent-400 hover:prose-a:text-accent-400  prose-hr:border-base-300 prose-pre:border-none prose-pre:rounded-none prose-strong:font-medium prose-strong:text-white prose-code:text-white prose-a:duration-200  max-w-none prose:font-sans prose-hr:border-base-800 prose-img:border-base-900 prose-tr:border-base-800 prose-thead:border-base-800 prose-pre:rounded-2xl",
+};
+// Combine the classes for the specified variant with any extra classes
+const classes = `${variantClasses[variant]} ${extraClass}`.trim();
+---
+
+<div class={classes}>
+  <slot />
+</div>

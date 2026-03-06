@@ -1,0 +1,50 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/typography";
+@import 'tailwind-scrollbar-hide/v4';
+@theme {
+  /* Typography*/
+  --font-sans: "InterVariable", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  /* Colors */
+  --color-accent-50: oklch(0.95 0.023 283.31);
+  --color-accent-100: oklch(0.899 0.049 284.13);
+  --color-accent-200: oklch(0.799 0.1 281.38);
+  --color-accent-300: oklch(0.698 0.154 279.17);
+  --color-accent-400: oklch(0.601 0.209 274.86);
+  --color-accent-500: oklch(0.501 0.266 266.94);
+  --color-accent-600: oklch(0.435 0.244 265.49);
+  --color-accent-700: oklch(0.363 0.204 265.43);
+  --color-accent-800: oklch(0.29 0.162 265.52);
+  --color-accent-900: oklch(0.217 0.123 265.23);
+  --color-accent-950: oklch(0.172 0.097 265.24);
+  --color-base-50: oklch(0.985 0 0);
+  --color-base-100: oklch(0.97 0 0);
+  --color-base-200: oklch(0.922 0 0);
+  --color-base-300: oklch(0.87 0 0);
+  --color-base-400: oklch(0.708 0 0);
+  --color-base-500: oklch(0.556 0 0);
+  --color-base-600: oklch(0.439 0 0);
+  --color-base-700: oklch(0.371 0 0);
+  --color-base-800: oklch(0.269 0 0);
+  --color-base-900: oklch(0.205 0 0);
+  --color-base-950: oklch(0.145 0 0);
+ --background-image-stripes: repeating-linear-gradient(
+    125deg,
+    transparent,
+    transparent 6px,
+    #e8e8e820 6px,
+    #e8e8e820  7px
+  );
+  --background-image-diamonds: 
+  linear-gradient(90deg, rgb(86,95,201) 0%, rgb(86,95,201) 3%, rgb(95,74,173) 3%, rgb(95,74,173) 11%, rgb(74,61,145) 11%, rgb(74,61,145) 20%, rgb(49,54,118) 20%, rgb(49,54,118) 49%, rgb(39,37,90) 49%, rgb(39,37,90) 71%, rgb(29,24,62) 71%, rgb(29,24,62) 72%, rgb(1,12,34) 72%, rgb(1,12,34) 100%),
+  linear-gradient(67.5deg, rgb(86,95,201) 0%, rgb(86,95,201) 3%, rgb(95,74,173) 3%, rgb(95,74,173) 11%, rgb(74,61,145) 11%, rgb(74,61,145) 20%, rgb(49,54,118) 20%, rgb(49,54,118) 49%, rgb(39,37,90) 49%, rgb(39,37,90) 71%, rgb(29,24,62) 71%, rgb(29,24,62) 72%, rgb(1,12,34) 72%, rgb(1,12,34) 100%),
+  linear-gradient(112.5deg, rgb(86,95,201) 0%, rgb(86,95,201) 3%, rgb(95,74,173) 3%, rgb(95,74,173) 11%, rgb(74,61,145) 11%, rgb(74,61,145) 20%, rgb(49,54,118) 20%, rgb(49,54,118) 49%, rgb(39,37,90) 49%, rgb(39,37,90) 71%, rgb(29,24,62) 71%, rgb(29,24,62) 72%, rgb(1,12,34) 72%, rgb(1,12,34) 100%),
+  linear-gradient(45deg, rgb(86,95,201) 0%, rgb(86,95,201) 3%, rgb(95,74,173) 3%, rgb(95,74,173) 11%, rgb(74,61,145) 11%, rgb(74,61,145) 20%, rgb(49,54,118) 20%, rgb(49,54,118) 49%, rgb(39,37,90) 49%, rgb(39,37,90) 71%, rgb(29,24,62) 71%, rgb(29,24,62) 72%, rgb(1,12,34) 72%, rgb(1,12,34) 100%),
+  linear-gradient(90deg, rgb(95,3,74), rgb(35,65,96));
+}
+
+
+@supports (font-variation-settings: normal) {
+  :root { font-family: InterVariable, sans-serif; }
+}

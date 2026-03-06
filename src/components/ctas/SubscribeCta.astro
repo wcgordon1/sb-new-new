@@ -1,0 +1,39 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import ShadowCard from "@/components/fundations/containers/ShadowCard.astro";
+---
+
+<section>
+  <Wrapper variant="standard" class="border-t border-base-900">
+    <ShadowCard
+      class="relative overflow-hidden flex text-center flex-col justify-end bg-diamonds bg-cover bg-blend-overlay"
+    >
+      <div class="relative lg:w-1/2 mx-auto py-24">
+        <Text
+          tag="h1"
+          variant="displayMD"
+          class="text-white lg:text-balance xl:text-4xl font-thin tracking-tighter font-mono uppercase"
+          >Subscribe to our newsletter</Text
+        >
+        <div class="flex justify-center max-w-sm mx-auto flex-col gap-2 mt-8">
+          <label class="sr-only"> Email </label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            required
+            autocomplete="email"
+            aria-required="true"
+            aria-describedby="email"
+            placeholder="Your email"
+            class="block w-full px-4 py-2 h-12 text-sm text-white duration-300 bg-black border border-transparent rounded-xl appearance-none outline outline-base-900 placeholder-base-400 focus:border-base-300 focus:bg-transparent focus:outline-none focus:outline-accent-500 focus:outline-offset-2 focus:outline-2 sm:text-sm"
+          />
+          <Button size="base" variant="default"> Apply! </Button>
+        </div>
+      </div>
+    </ShadowCard>
+  </Wrapper>
+</section>

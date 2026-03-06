@@ -1,0 +1,43 @@
+---
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import ShadowCard from "@/components/fundations/containers/ShadowCard.astro";
+---
+
+<BaseLayout hideNavigation={true} hideFooter={true}>
+  <section>
+    <Wrapper
+      variant="standard"
+      class="h-dvh lg:h-[calc(100dvh-4rem)] flex flex-col items-end border-t border-base-900"
+    >
+      <ShadowCard
+        class="relative overflow-hidden flex flex-col justify-center w-full bg-diamonds bg-cover bg-blend-overlay"
+      >
+        <div class="text-center">
+          <Text
+            tag="h1"
+            variant="displayMD"
+            class="text-white lg:text-balance font-thin tracking-tighter font-mono uppercase"
+          >
+            Oops! Got a 404 error. We've searched every corner of our digital
+            universe, but the page you're looking for must be out in the real
+            world.
+          </Text>
+
+          <Button
+            isLink
+            href="/"
+            size="sm"
+            variant="default"
+            class="mt-8 w-fit mx-auto"
+          >
+            Go back home
+          </Button>
+        </div>
+      </ShadowCard>
+    </Wrapper>
+  </section>
+</BaseLayout>

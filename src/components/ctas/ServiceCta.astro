@@ -1,0 +1,34 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import ShadowCard from "@/components/fundations/containers/ShadowCard.astro";
+---
+
+<section>
+  <Wrapper variant="standard" class="border-t border-base-900">
+    <ShadowCard
+      class="relative overflow-hidden flex flex-col justify-center bg-diamonds bg-cover bg-blend-overlay"
+    >
+      <div class="text-center py-24">
+        <Text
+          tag="h1"
+          variant="displayXL"
+          class="text-white lg:text-balance md:col-span-2 font-thin tracking-tighter font-mono uppercase"
+          >Tell us about your project, and let's build something great!</Text
+        >
+
+        <Button
+          isLink
+          href="/contact"
+          size="sm"
+          variant="default"
+          class="mt-12 w-fit mx-auto"
+        >
+          Apply!
+        </Button>
+      </div>
+    </ShadowCard>
+  </Wrapper>
+</section>

@@ -1,0 +1,144 @@
+---
+// Assets
+import { Image } from "astro:assets";
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import ShadowCard from "@/components/fundations/containers/ShadowCard.astro";
+// Icons
+import ArrowUpRight from "@/components/fundations/icons/ArrowUpRight.astro";
+// Components
+import WorkCard from "@/components/work/WorkCard.astro";
+// Content
+const { frontmatter } = Astro.props;
+// Content
+import { getCollection } from "astro:content";
+const allWork = await getCollection("work");
+// This layout is not using the <slot/> feature, it's getting content from the markdown file frontmatter.
+// The <slot/> feature is used to allow for dynamic content to be inserted into the layout by writing the content in the markdown file outsite the frontmatter.
+//
+// You can add the <slot/> where you want the content to be inserted by using the following syntax:
+// <slot/> and use the Wrapper component with variant="prose" to style the content, the styles are already defined in the Wrapper component.
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="border-t border-base-900">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-2 min-h-dvh">
+        <div class="lg:sticky lg:pb-16 top-8 lg:max-h-screen">
+          <ShadowCard class="bg-black">
+            <div class="flex items-center justify-between">
+              <Text tag="h1" variant="textBase" class="text-white">
+                {frontmatter.title}
+              </Text>
+              <Button
+                iconOnly
+                isLink
+                size="sm"
+                variant="muted"
+                href={frontmatter.live}
+              >
+                <ArrowUpRight slot="icon" size="sm" />
+              </Button>
+            </div>
+            <div class="border-y border-base-900 my-4 py-4">
+              {
+                frontmatter.intro &&
+                  frontmatter.intro.map((item) => (
+                    <div class="flex flex-col gap-2">
+                      {item.paragraphs &&
+                        item.paragraphs.map((paragraph) => (
+                          <Text tag="p" variant="textSM" class="text-base-400">
+                            {paragraph}
+                          </Text>
+                        ))}
+                    </div>
+                  ))
+              }
+            </div>
+            <div class="mt-4">
+              {
+                frontmatter.projectData.map((info) => (
+                  <div class="flex flex-col   gap-2 ">
+                    {Object.keys(info).map((key) => (
+                      <div class="flex items-center justify-between">
+                        <Text
+                          tag="h4"
+                          variant="textXS"
+                          class="text-white uppercase  font-medium"
+                        >
+                          {key}
+                        </Text>
+                        <Text
+                          tag="p"
+                          variant="textXS"
+                          class="text-base-400 text-balance"
+                        >
+                          {info[key]}
+                        </Text>
+                      </div>
+                    ))}
+                  </div>
+                ))
+              }
+            </div>
+            <div class="flex flex-col w-full gap-4 mt-8">
+              {
+                frontmatter.credits.map((credit) => (
+                  <div>
+                    <Text tag="p" variant="textXS" class="text-white">
+                      {credit.name}
+                    </Text>
+                    <Text tag="p" variant="textXS" class="text-base-400">
+                      {credit.role}
+                    </Text>
+                  </div>
+                ))
+              }
+            </div>
+          </ShadowCard>
+        </div>
+        <div class="flex flex-col gap-4 lg:col-span-2">
+          <Image
+            width={1000}
+            height={1000}
+            src={frontmatter.thumbnail.url}
+            alt={frontmatter.thumbnail.alt}
+            class="w-full aspect-16/10 object-cover object-center rounded-xl"
+          />
+          {
+            frontmatter.images.map((image) => (
+              <Image
+                src={image.url}
+                alt={image.alt}
+                width={1000}
+                height={1000}
+                class="w-full aspect-16/10 object-cover object-center  rounded-xl"
+              />
+            ))
+          }
+        </div>
+      </div>
+    </Wrapper>
+  </section>
+  <section>
+    <Wrapper variant="standard" class="border-t border-base-900">
+      <div class="flex items-center justify-between w-full rounded-r-full">
+        <Text
+          tag="h3"
+          variant="textBase"
+          class="text-base-400 font-thin font-mono uppercase"
+          >other work latest work
+        </Text>
+        <Button isLink size="sm" variant="muted" href="/work">
+          View all projects
+        </Button>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+        {allWork.slice(0, 2).map((post) => <WorkCard post={post} />)}
+      </div>
+    </Wrapper>
+  </section>
+</BaseLayout>

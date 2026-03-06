@@ -1,0 +1,137 @@
+---
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Data array
+const pageData = [
+  {
+    sectionTitle: "Static",
+    categories: [
+      {
+        title: "Main",
+        links: [
+          { label: "Home", url: "/" },
+          { label: "404", url: "/404" },
+        ],
+      },
+      {
+        title: "Forms",
+        links: [
+          { label: "Sign in", url: "/forms/sign-in" },
+          { label: "Sign up", url: "/forms/sign-up" },
+          { label: "Contact", url: "/forms/contact" },
+        ],
+      },
+
+      {
+        title: "System Pages",
+        links: [
+          { label: "Links", url: "/system/links" },
+          { label: "Colors", url: "/system/colors" },
+          { label: "Buttons", url: "/system/buttons" },
+          { label: "Typography", url: "/system/typography" },
+          {
+            label: "License",
+            url: "https://lexingtonthemes.com/legal/license/",
+          },
+          {
+            label: "Documentation",
+            url: "https://lexingtonthemes.com/documentation",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    sectionTitle: "Content collections",
+    categories: [
+      {
+        title: "Work",
+        links: [
+          { label: "Home", url: "/work" },
+          { label: "Details", url: "/work/1" },
+        ],
+      },
+      {
+        title: "Services",
+        links: [{ label: "Details", url: "/services/app" }],
+      },
+      {
+        title: "Teams",
+        links: [
+          { label: "Home", url: "/team" },
+          { label: "Details", url: "/team/1" },
+        ],
+      },
+      {
+        title: "Blog Pages",
+        links: [
+          { label: "Home", url: "/blog" },
+          { label: "Detailsost", url: "/blog/posts/1" },
+          { label: "Tag index", url: "/blog/tags" },
+          { label: "Tag Category", url: "/blog/tags/web3" },
+          { label: "RSS", url: "/rss.xml" },
+        ],
+      },
+      {
+        title: "Legal",
+        links: [{ label: "Details", url: "/legal/terms" }],
+      },
+    ],
+  },
+];
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper variant="standard" class="border-t border-base-900">
+      <Text
+        tag="h1"
+        variant="textLG"
+        class="text-base-400 tracking-tighter font-thin"
+      >
+        Overview
+      </Text>
+      <div class="flex flex-col mt-2 gap-12 upppercase">
+        {
+          pageData.map((section) => (
+            <div class="md:col-span-2">
+              <Text
+                tag="p"
+                variant="textBase"
+                class=" text-white uppercase font-mono"
+              >
+                {section.sectionTitle}
+              </Text>
+              <div class=" grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-y-8 mt-8">
+                {section.categories.map((category) => (
+                  <div class="flex flex-col space-y-2">
+                    <Text
+                      tag="h3"
+                      variant="textBase"
+                      class=" text-white uppercase font-mono"
+                    >
+                      {category.title}
+                    </Text>
+                    {category.links.map((link) => (
+                      <Text
+                        tag="a"
+                        variant="textSM"
+                        class="text-base-400 hover:text-white"
+                        href={link.url}
+                        title={link.label}
+                      >
+                        {link.label}
+                      </Text>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </Wrapper>
+  </section>
+</BaseLayout>

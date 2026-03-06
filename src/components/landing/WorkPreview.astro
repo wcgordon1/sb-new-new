@@ -1,0 +1,37 @@
+---
+// Fundatoions
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import ShadowCard from "@/components/fundations/containers/ShadowCard.astro";
+// Components
+import WorkCard from "@/components/work/WorkCard.astro";
+// Content
+import { getCollection } from "astro:content";
+// Work
+const allWork = await getCollection("work");
+// Sort 'allWork' alphabetically by title
+allWork.sort((a, b) => a.data.title.localeCompare(b.data.title));
+---
+
+<section>
+  <Wrapper variant="standard" class="border-t border-base-900">
+    <ShadowCard class="bg-black">
+      <div class="flex items-center justify-between w-full">
+        <Text
+          tag="h3"
+          variant="textBase"
+          class="text-base-400 font-thin font-mono uppercase"
+        >
+          Selected work
+        </Text>
+        <Button isLink size="xs" variant="muted" href="/work">
+          View all projects
+        </Button>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8">
+        {allWork.slice(0, 2).map((post) => <WorkCard post={post} />)}
+      </div>
+    </ShadowCard>
+  </Wrapper>
+</section>

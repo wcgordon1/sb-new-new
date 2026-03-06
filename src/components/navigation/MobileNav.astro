@@ -1,0 +1,106 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";;
+// Icons
+import Close from "@/components/fundations/icons/Close.astro";
+import Burger from "@/components/fundations/icons/Burger.astro";
+type PrimaryLink = {
+  label: string;
+  href: string;
+};
+const {
+  primaryLinks = [],
+  ctaHref = "https://lexingtonthemes.com/templates/studiomax",
+  ctaLabel = "Buy StudioMax",
+} = Astro.props;
+---
+
+<div class="ml-auto lg:hidden">
+  <Button
+    type="button"
+    variant="muted"
+    iconOnly
+    size="sm"
+    aria-expanded="false"
+    data-mobile-menu-button
+  >
+    <span class="sr-only">Toggle navigation</span>
+    <Burger slot="icon" size="sm" data-burger-icon />
+    <Close slot="icon" size="sm" data-close-icon class="hidden" />
+  </Button>
+</div>
+
+<div
+  data-mobile-menu
+  class="fixed left-0 right-0 top-[72px] origin-top scale-y-95 opacity-0 invisible bg-base-900 border-y border-base-800 p-2 shadow-xl transition-all duration-200 ease-out z-50 lg:hidden bg-base-900"
+>
+  <nav
+    class="flex flex-col gap-4 utline rounded-xl outline-base-800 shadow-2xl shadow-black p-8 bg-black"
+  >
+    {
+      primaryLinks.map((link: PrimaryLink) => (
+        <Text
+          tag="a"
+          variant="textXL"
+          href={link.href}
+          class="text-white hover:text-base-200 transition-colors "
+        >
+          {link.label}
+        </Text>
+      ))
+    }
+  </nav>
+
+  <div class="mt-6 flex flex-col gap-2">
+    <Button isLink href="/sign-in" size="sm" variant="muted" class="w-full">
+      Sign in
+    </Button>
+    <Button isLink href="/sign-up" size="sm" variant="accent" class="w-full">
+      Sign up
+    </Button>
+  </div>
+</div>
+
+<script>
+  const button = document.querySelector("[data-mobile-menu-button]");
+  const menu = document.querySelector("[data-mobile-menu]");
+  const burgerIcon = document.querySelector("[data-burger-icon]");
+  const closeIcon = document.querySelector("[data-close-icon]");
+  if (button && menu) {
+    let isOpen = false;
+    const toggle = (open: boolean) => {
+      isOpen = open;
+      button.setAttribute("aria-expanded", String(open));
+      if (open) {
+        menu.classList.remove("scale-y-95", "opacity-0", "invisible");
+        menu.classList.add("scale-y-100", "opacity-100", "visible");
+      } else {
+        menu.classList.add("scale-y-95", "opacity-0", "invisible");
+        menu.classList.remove("scale-y-100", "opacity-100", "visible");
+      }
+      burgerIcon?.classList.toggle("hidden", open);
+      closeIcon?.classList.toggle("hidden", !open);
+    };
+    button.addEventListener("click", () => toggle(!isOpen));
+    // Close when clicking outside
+    document.addEventListener("click", (e) => {
+      if (
+        isOpen &&
+        !button.contains(e.target as Node) &&
+        !menu.contains(e.target as Node)
+      ) {
+        toggle(false);
+      }
+    });
+    // Close on escape
+    document.addEventListener(
+      "keydown",
+      (e) => e.key === "Escape" && toggle(false)
+    );
+    // Close on resize to desktop
+    window
+      .matchMedia("(min-width: 1024px)")
+      .addEventListener("change", (e) => e.matches && toggle(false));
+  }
+</script>

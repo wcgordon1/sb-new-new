@@ -1,0 +1,45 @@
+---
+// Fundations
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import ShadowCard from "@/components/fundations/containers/ShadowCard.astro";
+// Components
+import WorkCard from "@/components/work/WorkCard.astro";
+// Content
+import { getCollection } from "astro:content";
+// Work
+const allWork = await getCollection("work");
+// Sort 'allWork' alphabetically by title
+allWork.sort((a, b) => a.data.title.localeCompare(b.data.title));
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper
+      variant="standard"
+      class="h-dvh lg:h-[calc(100dvh-6rem)] flex flex-col items-end border-t border-base-900"
+    >
+      <ShadowCard
+        class="relative overflow-hidden flex flex-col justify-center w-full bg-diamonds bg-cover bg-blend-overlay"
+      >
+        <Text
+          tag="h1"
+          variant="display6XL"
+          class="text-white text-center lg:text-balance font-thin tracking-tighter font-mono uppercase"
+        >
+          work
+        </Text>
+      </ShadowCard>
+    </Wrapper>
+  </section>
+  <section>
+    <Wrapper variant="standard" class="border-t border-base-900">
+      <ShadowCard class="bg-black">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 gap-y-24">
+          {allWork.map((post) => <WorkCard post={post} />)}
+        </div>
+      </ShadowCard>
+    </Wrapper>
+  </section>
+</BaseLayout>

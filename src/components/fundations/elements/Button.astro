@@ -1,0 +1,163 @@
+---
+const {
+  variant,
+  size,
+  iconOnly = false,
+  gap,
+  isLink = false,
+  class: className,
+  ...rest
+} = Astro.props;
+
+// Default button
+const defaultClass = [
+  "text-black",
+  "bg-linear-10 from-base-100 to-base-200 ",
+  "hover:bg-base-400",
+  "focus:outline-base-200",
+  "ring-base-200",
+];
+
+// Accent button
+const accentClass = [
+  "text-white",
+  "bg-linear-to-r/oklch from-accent-700 to-accent-600 ",
+  "focus:outline-accent-600",
+  "ring-accent-600",
+];
+
+// Muted button
+const mutedClass = [
+  "text-white",
+  "bg-linear-to-r/oklch from-base-900 to-base-950 ",
+  "hover:bg-base-400",
+  "focus:outline-base-900",
+  "ring-base-900",
+];
+
+// Icon button
+const iconClass = [
+  "text-white",
+  "bg-base-950",
+  "border border-base-800",
+  "hover:bg-base-900",
+  "focus:outline-base-400",
+  "shadow-none",
+  "p-0",
+  "rounded-md",
+];
+
+// Variant map
+const variantClass = {
+  default: defaultClass,
+  accent: accentClass,
+  muted: mutedClass,
+  icon: iconClass,
+  none: [],
+};
+
+// Size
+const sizes = {
+  xxs: ["h-7.5", "px-4", "py-2", "text-xs", " rounded-lg"],
+  xs: ["h-8", "px-4", "py-3", "text-xs", " rounded-lg"],
+  sm: ["h-9", "px-4", "py-3", "text-sm", "rounded-lg"],
+  base: ["h-10", "px-5", "py-4", "text-sm", "rounded-lg"],
+  md: ["h-11", "px-5", "py-4", "text-base", "rounded-lg"],
+  lg: ["h-12", "px-5", "py-4", "text-lg", "rounded-lg"],
+  xl: ["h-13", "px-5", "py-4", "text-lg", "rounded-xl"],
+};
+
+// Icon size
+const iconSizes = {
+  xxs: ["size-7.5", "py-2", "text-xs", " rounded-lg"],
+  xs: ["size-8", "text-xs", " rounded-lg"],
+  sm: ["size-9", "text-sm", "rounded-lg"],
+  base: ["size-10", "text-sm", "rounded-lg"],
+  md: ["size-11", "text-base", "rounded-lg"],
+  lg: ["size-12", "text-lg", "rounded-lg"],
+  xl: ["size-13", "text-lg", "rounded-xl"],
+};
+
+// Gaps
+const gapMap = {
+  xs: ["gap-2"],
+  sm: ["gap-4"],
+  base: ["gap-8"],
+  md: ["gap-10"],
+  lg: ["gap-12"],
+};
+
+const isIconOnly = variant === "icon" || iconOnly;
+const sizeClass = isIconOnly
+  ? iconSizes[size] || iconSizes["md"]
+  : sizes[size] || [];
+const gapClass = !isIconOnly && gap ? gapMap[gap] || [] : [];
+const additionalClasses = className ? className.split(" ") : [];
+
+const baseClass = [
+  "flex",
+  "relative",
+  "text-center",
+  "font-medium",
+  "items-center",
+  "shadow-button",
+  "justify-center",
+  "overflow-hidden",
+  "border border-transparent",
+  "duration-300",
+  "ease-in-out",
+  "transition-all",
+  "outline-offset-4",
+  "hover:opacity-90",
+  "hover:shadow-none",
+  "focus-visible:outline-none focus:outline-2",
+  "inset-shadow-xs inset-shadow-white/10 ring active:inset-shadow-transparent",
+];
+---
+
+{
+  isLink ? (
+    <a
+      href={rest.href}
+      class:list={[
+        ...baseClass,
+        ...(variantClass[variant] || []),
+        ...sizeClass,
+        ...gapClass,
+        ...additionalClasses,
+      ]}
+      {...rest}
+    >
+      {iconOnly ? (
+        <slot name="icon" />
+      ) : (
+        <>
+          <slot name="left-icon" />
+          <slot />
+          <slot name="right-icon" />
+        </>
+      )}
+    </a>
+  ) : (
+    <button
+      class:list={[
+        ...baseClass,
+        ...(variantClass[variant] || []),
+        ...sizeClass,
+        ...gapClass,
+        ...additionalClasses,
+      ]}
+      {...rest}
+    >
+      {iconOnly ? (
+        <slot name="icon" />
+      ) : (
+        <>
+          <slot name="left-icon" />
+          <slot />
+          <slot name="right-icon" />
+        </>
+      )}
+    </button>
+  )
+}

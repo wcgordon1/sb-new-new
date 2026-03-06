@@ -1,0 +1,14 @@
+---
+// ShadowCard Component This component renders an SVG ShadowCard and accepts props for customization.
+// Props: - class: A string of additional classes to style the SVG.
+// - ...rest: Any other valid attributes for an <svg> element (e.g., id, style, role, aria-label, etc.).
+// Example Usage: <ShadowCard class="my-custom-class" /> or <ShadowCard id="ShadowCard-id" style="width: 50px; height: 50px;" />
+// ADd your ShadowCard here and pass the   class={className} {...rest} like on the example
+const { class: className = "", ...rest } = Astro.props;
+---
+<div
+  class={`${className} relative overflow-hidden h-full outline rounded-xl outline-base-900 shadow-2xl shadow-black p-8 `}
+  {...rest}
+>
+  <slot />
+</div>

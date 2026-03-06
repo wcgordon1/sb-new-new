@@ -1,0 +1,35 @@
+---
+// Assets
+import { Image } from "astro:assets";
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+const { url, title, description, image } = {
+  url: "/blog/posts/" + Astro.props.post.slug,
+  title: Astro.props.post.data.title,
+  image: Astro.props.post.data.image.url,
+  description: Astro.props.post.data.description,
+};
+---
+
+<div class="relative overflow-hidden group">
+  <a class="absolute inset-0 z-10" href={url} title={title}></a>
+  <div class="relative flex flex-col gap-4">
+    <Image
+      alt={title}
+      src={image}
+      width={1000}
+      height={100}
+      class="size-full aspect-12/8 object-cover object-center rounded-xl"
+    />
+    <div class="flex h-full items-start justify-between">
+      <div>
+        <Text tag="h3" variant="textLG" class="text-white font-medium">
+          {title}
+        </Text>
+        <Text tag="p" variant="textBase" class="text-base-500 mt-1">
+          {description}
+        </Text>
+      </div>
+    </div>
+  </div>
+</div>

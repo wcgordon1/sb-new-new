@@ -1,0 +1,41 @@
+---
+// Fundatoions
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import ShadowCard from "@/components/fundations/containers/ShadowCard.astro";
+// Components
+import BlogEntries1 from "@/components/blog/BlogCard.astro";
+// Content
+import { getCollection } from "astro:content";
+// Blog
+const allPosts = await getCollection("posts");
+// Sort posts by date
+allPosts.sort((a, b) => {
+  const dateA = new Date(a.data.pubDate).getTime();
+  const dateB = new Date(b.data.pubDate).getTime();
+  return dateB - dateA;
+});
+---
+
+<section>
+  <Wrapper variant="standard" class="border-t border-base-900">
+    <ShadowCard class="bg-black">
+      <div class="flex items-center justify-between w-full">
+        <Text
+          tag="h3"
+          variant="textBase"
+          class="text-base-400 font-thin font-mono uppercase"
+        >
+          Our magazine
+        </Text>
+        <Button isLink size="sm" variant="muted" href="/blog">
+          Read our blog
+        </Button>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-8">
+        {allPosts.slice(0, 3).map((post) => <BlogEntries1 post={post} />)}
+      </div>
+    </ShadowCard>
+  </Wrapper>
+</section>

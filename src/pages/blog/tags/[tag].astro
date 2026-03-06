@@ -1,0 +1,54 @@
+---
+// Fundatons
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Text from "@/components/fundations/elements/Text.astro";
+import Button from "@/components/fundations/elements/Button.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+// Components
+import TagEntries from "@/components/blog/TagEntries.astro";
+// Sections
+import SubscribeCta from "@/components/ctas/SubscribeCta.astro";
+// Content
+import { getCollection } from "astro:content";
+export const prerender = true;
+export async function getStaticPaths() {
+  const allPosts = await getCollection("posts");
+  const uniqueTags = [
+    ...new Set(allPosts.map((post) => post.data.tags).flat()),
+  ];
+  return uniqueTags.map((tag) => {
+    const filteredPosts = allPosts.filter((post) =>
+      post.data.tags.includes(tag)
+    );
+    return {
+      params: { tag },
+      props: { posts: filteredPosts },
+    };
+  });
+}
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+---
+
+<BaseLayout>
+  <section>
+    <Wrapper class="border-t border-base-800">
+      <div class="flex items-center justify-between w-full">
+        <Text
+          tag="h3"
+          variant="textBase"
+          class="text-base-400 font-thin font-mono uppercase"
+        >
+          Our magazine
+        </Text>
+        <Button isLink size="sm" variant="muted" href="/blog">
+          Read our blog
+        </Button>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mt-8">
+        {posts.slice(0, 3).map((post) => <TagEntries post={post} />)}
+      </div>
+    </Wrapper>
+  </section>
+  <SubscribeCta />
+</BaseLayout>
