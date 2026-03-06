@@ -13,14 +13,36 @@ import ShadowCard from "@/components/fundations/containers/ShadowCard.astro";
     <ShadowCard
       class="relative overflow-hidden flex flex-col justify-center w-full bg-diamonds bg-cover bg-blend-overlay"
     >
+      <div class="w-full -mx-8 px-2" style="container-type: inline-size; width: calc(100% + 4rem);">
+        <h1
+          class="font-extrabold text-white text-center tracking-tighter"
+          style="
+            font-family: 'Space Grotesk', 'InterVariable', sans-serif;
+            width: 100%;
+            font-size: 18.5cqi;
+            letter-spacing: -0.06em;
+            line-height: 0.95;
+            margin: 0;
+            padding: 0;
+            white-space: nowrap;
+            font-weight: 900;
+            text-shadow:
+              0 3px 18px rgba(7,14,30,0.32),
+              0 1px 0px #fff, 
+              0 0px 6px rgba(0,0,0,0.10);
+          "
+        >
+          StarterBuild
+        </h1>
+      </div>
       <Text
-        tag="h1"
+        tag="h2"
         variant="displayMD"
-        class="text-white lg:text-balance font-thin tracking-tighter font-mono uppercase text-center"
+        class="text-white lg:text-balance font-thin tracking-tighter font-mono uppercase text-center mt-6"
       >
-        Award-winning development studio based in Sweden, creating innovative
-        and high-quality digital solutions
+        We build internet businesses
       </Text>
+     
     </ShadowCard>
   </Wrapper>
 </section>

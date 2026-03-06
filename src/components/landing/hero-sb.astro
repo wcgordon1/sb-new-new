@@ -1,0 +1,390 @@
+---
+// Fundations
+import Text from "@/components/fundations/elements/Text.astro";
+import Wrapper from "@/components/fundations/containers/Wrapper.astro";
+import ShadowCard from "@/components/fundations/containers/ShadowCard.astro";
+---
+
+<section>
+  <Wrapper
+    variant="standard"
+    class="h-[72dvh] sm:h-dvh lg:h-[calc(100dvh-6rem)] flex flex-col items-end border-t border-base-900"
+  >
+    <ShadowCard
+      class="relative overflow-hidden flex flex-col justify-center w-full bg-diamonds bg-cover bg-center bg-blend-overlay"
+      style="--sb-title-font-size: 120px;"
+    >
+      <div data-sb-hero-container class="absolute inset-0">
+        <h2 class="sr-only">StarterBuild interactive hero</h2>
+      </div>
+      <div
+        class="pointer-events-none absolute left-1/2 z-10 w-full px-4 sm:px-6 lg:px-8 text-center"
+        style="top: min(86%, calc(50% + (var(--sb-title-font-size) * 0.62))); transform: translateX(-50%);"
+      >
+        <Text
+          tag="h2"
+          variant="displayMD"
+          class="text-white lg:text-balance font-thin tracking-tighter font-mono uppercase text-center"
+        >
+          We Build Internet Businesses
+        </Text>
+      </div>
+    </ShadowCard>
+  </Wrapper>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import * as THREE from "three";
+
+  const vertexShader = `
+    varying vec2 vUv;
+
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `;
+
+  const fragmentShader = `
+    varying vec2 vUv;
+    uniform sampler2D u_texture;
+    uniform vec2 u_mouse;
+    uniform vec2 u_prevMouse;
+    uniform vec2 u_resolution;
+    uniform float u_time;
+    uniform float u_glitch;
+
+    void main() {
+      vec2 grid = vec2(48.0, 48.0 * (u_resolution.y / u_resolution.x));
+      vec2 snappedUv = floor(vUv * grid) / grid;
+      vec2 cellCenter = snappedUv + (0.5 / grid);
+
+      vec2 mouseDelta = u_mouse - u_prevMouse;
+      float mouseDistance = length(cellCenter - u_mouse);
+      float strength = smoothstep(0.28, 0.0, mouseDistance);
+
+      vec2 uvOffset = strength * -mouseDelta * 0.42;
+      vec2 sampleUv = clamp(vUv - uvOffset, 0.0, 1.0);
+
+      // Glitch pulse: horizontal band jitter that kicks in briefly on interval.
+      float bandNoise = fract(sin((vUv.y * 160.0) + (u_time * 37.0)) * 43758.5453123);
+      float bandMask = step(0.86, bandNoise);
+      float wave = sin((vUv.y * 85.0) + (u_time * 95.0));
+      sampleUv.x += wave * 0.022 * u_glitch * bandMask;
+
+      sampleUv = clamp(sampleUv, 0.0, 1.0);
+      gl_FragColor = texture2D(u_texture, sampleUv);
+    }
+  `;
+
+  const componentNodes = document.querySelectorAll("[data-sb-hero-container]");
+  componentNodes.forEach((node) => {
+    if (!(node instanceof HTMLElement)) {
+      return;
+    }
+
+    if (node.dataset.sbHeroMounted === "true") {
+      return;
+    }
+
+    node.dataset.sbHeroMounted = "true";
+    setupStarterBuildHero(node);
+  });
+
+  function setupStarterBuildHero(container: HTMLElement) {
+    const textValue = "StarterBuild";
+    const fontFamily = '"Space Grotesk", "InterVariable", sans-serif';
+    const mouse = new THREE.Vector2(0.5, 0.5);
+    const targetMouse = new THREE.Vector2(0.5, 0.5);
+    const prevMouse = new THREE.Vector2(0.5, 0.5);
+    let easeFactor = 0.08;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+    camera.position.z = 1;
+
+    const uniforms = {
+      u_texture: { value: null as THREE.CanvasTexture | null },
+      u_mouse: { value: new THREE.Vector2(0.5, 0.5) },
+      u_prevMouse: { value: new THREE.Vector2(0.5, 0.5) },
+      u_resolution: { value: new THREE.Vector2(1, 1) },
+      u_time: { value: 0 },
+      u_glitch: { value: 0 },
+    };
+
+    const material = new THREE.ShaderMaterial({
+      uniforms,
+      vertexShader,
+      fragmentShader,
+      transparent: true,
+    });
+
+    const planeMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
+    scene.add(planeMesh);
+
+    const renderer = new THREE.WebGLRenderer({
+      alpha: true,
+      antialias: true,
+    });
+    renderer.setClearColor(0x000000, 0);
+    renderer.domElement.style.width = "100%";
+    renderer.domElement.style.height = "100%";
+    renderer.domElement.style.display = "block";
+    renderer.domElement.style.pointerEvents = "none";
+    container.appendChild(renderer.domElement);
+
+    let activeTexture: THREE.CanvasTexture | null = null;
+    let rafId = 0;
+    let resizeRafId = 0;
+    let glitchIntervalId = 0;
+    let isPointerInside = false;
+    const glitchState = { value: 0 };
+
+    const updateTexture = () => {
+      const nextTexture = createTextTexture(container, textValue, fontFamily);
+      if (!nextTexture) {
+        return;
+      }
+
+      if (activeTexture) {
+        activeTexture.dispose();
+      }
+
+      activeTexture = nextTexture;
+      uniforms.u_texture.value = nextTexture;
+      material.needsUpdate = true;
+    };
+
+    const resizeScene = () => {
+      const rect = container.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) {
+        return;
+      }
+
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      renderer.setPixelRatio(pixelRatio);
+      renderer.setSize(rect.width, rect.height, false);
+      uniforms.u_resolution.value.set(rect.width, rect.height);
+      updateTexture();
+    };
+
+    const queueResize = () => {
+      if (resizeRafId) {
+        window.cancelAnimationFrame(resizeRafId);
+      }
+
+      resizeRafId = window.requestAnimationFrame(() => {
+        resizeScene();
+      });
+    };
+
+    const onPointerMove = (event: PointerEvent) => {
+      const rect = container.getBoundingClientRect();
+      if (!rect.width || !rect.height) {
+        return;
+      }
+
+      targetMouse.set(
+        (event.clientX - rect.left) / rect.width,
+        (event.clientY - rect.top) / rect.height
+      );
+      easeFactor = 0.16;
+
+      // If the user is actively moving over the hero, suppress any active glitch pulse.
+      gsap.killTweensOf(glitchState);
+      glitchState.value = 0;
+    };
+
+    const onPointerEnter = (event: PointerEvent) => {
+      isPointerInside = true;
+      const rect = container.getBoundingClientRect();
+      if (!rect.width || !rect.height) {
+        return;
+      }
+
+      const x = (event.clientX - rect.left) / rect.width;
+      const y = (event.clientY - rect.top) / rect.height;
+
+      mouse.set(x, y);
+      prevMouse.set(x, y);
+      targetMouse.set(x, y);
+      easeFactor = 0.08;
+    };
+
+    const onPointerLeave = () => {
+      isPointerInside = false;
+      easeFactor = 0.06;
+      gsap.to(targetMouse, {
+        x: 0.5,
+        y: 0.5,
+        duration: 0.8,
+        ease: "power3.out",
+      });
+    };
+
+    const animate = () => {
+      rafId = window.requestAnimationFrame(animate);
+
+      mouse.x += (targetMouse.x - mouse.x) * easeFactor;
+      mouse.y += (targetMouse.y - mouse.y) * easeFactor;
+
+      prevMouse.lerp(mouse, 0.14);
+      uniforms.u_mouse.value.set(mouse.x, 1 - mouse.y);
+      uniforms.u_prevMouse.value.set(prevMouse.x, 1 - prevMouse.y);
+      uniforms.u_time.value = performance.now() * 0.001;
+      const isHoverAnimationActive =
+        isPointerInside && mouse.distanceTo(targetMouse) > 0.0015;
+      uniforms.u_glitch.value = isHoverAnimationActive ? 0 : glitchState.value;
+
+      renderer.render(scene, camera);
+    };
+
+    const triggerGlitch = () => {
+      const isHoverAnimationActive =
+        isPointerInside && mouse.distanceTo(targetMouse) > 0.0015;
+      if (isHoverAnimationActive) {
+        return;
+      }
+
+      glitchState.value = 0.95 + Math.random() * 0.35;
+      gsap.to(glitchState, {
+        value: 0,
+        duration: 0.32,
+        ease: "power2.out",
+      });
+    };
+
+    const resizeObserver = new ResizeObserver(queueResize);
+    resizeObserver.observe(container);
+    window.addEventListener("resize", queueResize);
+
+    container.addEventListener("pointermove", onPointerMove);
+    container.addEventListener("pointerenter", onPointerEnter);
+    container.addEventListener("pointerleave", onPointerLeave);
+
+    resizeScene();
+    if ("fonts" in document) {
+      document.fonts.ready.then(() => {
+        queueResize();
+      });
+    }
+    triggerGlitch();
+    glitchIntervalId = window.setInterval(triggerGlitch, 3000);
+    animate();
+    gsap.fromTo(
+      renderer.domElement,
+      { opacity: 0 },
+      { opacity: 1, duration: 0.8, ease: "power2.out" }
+    );
+
+    const cleanup = () => {
+      window.cancelAnimationFrame(rafId);
+      window.cancelAnimationFrame(resizeRafId);
+      window.clearInterval(glitchIntervalId);
+      gsap.killTweensOf(glitchState);
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", queueResize);
+
+      container.removeEventListener("pointermove", onPointerMove);
+      container.removeEventListener("pointerenter", onPointerEnter);
+      container.removeEventListener("pointerleave", onPointerLeave);
+
+      if (activeTexture) {
+        activeTexture.dispose();
+      }
+
+      planeMesh.geometry.dispose();
+      material.dispose();
+      renderer.dispose();
+      renderer.domElement.remove();
+      delete container.dataset.sbHeroMounted;
+    };
+
+    window.addEventListener("pagehide", cleanup, { once: true });
+  }
+
+  function createTextTexture(
+    container: HTMLElement,
+    text: string,
+    fontFamily: string
+  ): THREE.CanvasTexture | null {
+    const rect = container.getBoundingClientRect();
+    const cssWidth = Math.max(1, Math.floor(rect.width));
+    const cssHeight = Math.max(1, Math.floor(rect.height));
+    const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.floor(cssWidth * pixelRatio));
+    canvas.height = Math.max(1, Math.floor(cssHeight * pixelRatio));
+
+    const context = canvas.getContext("2d");
+    if (!context) {
+      return null;
+    }
+
+    context.scale(pixelRatio, pixelRatio);
+    context.clearRect(0, 0, cssWidth, cssHeight);
+    context.imageSmoothingEnabled = true;
+    context.imageSmoothingQuality = "high";
+
+    const isMobileWidth = cssWidth < 640;
+    const horizontalPadding = isMobileWidth ? 16 : 12;
+    const targetWidth = Math.max(1, cssWidth - horizontalPadding * 2);
+    const maxFontSize = cssHeight * 0.88;
+    const minFontSize = 16;
+    let low = minFontSize;
+    let high = Math.max(minFontSize, Math.floor(maxFontSize));
+    let best = minFontSize;
+    const textNarrowness = isMobileWidth ? 0.86 : 0.88;
+    const textTallness = isMobileWidth ? 1.08 : 1.1;
+    const textSkewX = isMobileWidth ? -0.03 : -0.04;
+
+    while (low <= high) {
+      const mid = Math.floor((low + high) / 2);
+      context.font = `900 ${mid}px ${fontFamily}`;
+      const textWidth = context.measureText(text).width * textNarrowness;
+
+      if (textWidth <= targetWidth) {
+        best = mid;
+        low = mid + 1;
+      } else {
+        high = mid - 1;
+      }
+    }
+
+    context.font = `900 ${best}px ${fontFamily}`;
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+
+    context.save();
+    context.translate(cssWidth / 2, cssHeight / 2);
+    context.transform(1, 0, textSkewX, 1, 0, 0);
+    context.scale(textNarrowness, textTallness);
+    const titleSize = best * textTallness;
+    if (container.parentElement instanceof HTMLElement) {
+      container.parentElement.style.setProperty(
+        "--sb-title-font-size",
+        `${titleSize}px`
+      );
+    }
+
+    context.fillStyle = "#ffffff";
+    context.shadowColor = "rgba(7, 14, 30, 0.38)";
+    context.shadowBlur = Math.max(8, best * 0.16);
+    context.shadowOffsetY = Math.max(2, best * 0.055);
+    context.fillText(text, 0, 0);
+    context.globalAlpha = 0.96;
+    context.fillText(text, 0.75, 0);
+    context.globalAlpha = 1;
+    context.restore();
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    texture.generateMipmaps = false;
+    texture.needsUpdate = true;
+    return texture;
+  }
+</script>
